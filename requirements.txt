@@ -1,0 +1,37 @@
+# 粤策哨 Python 依赖（首个 PR 建立，后续模块按需增补）
+#
+# 安装：pip install -r requirements.txt
+# 约定：只列直接依赖并给下限，不锁死版本；版本冲突时以能跑通测试为准。
+# 本地模型（embedding / reranker）体积大，默认不装，见文件末尾说明。
+
+# ---- 测试（所有模块共用）--------------------------------------------------
+pytest>=8.0
+pytest-cov>=5.0
+
+# ---- rag/ 检索管线 --------------------------------------------------------
+# 稀疏检索：BM25；中文分词用 jieba + 自建政策术语词典
+rank_bm25>=0.2.2
+jieba>=0.42.1
+# 向量库与元数据过滤（A6 时效硬过滤走 where 条件）
+chromadb>=0.5.0
+# 编排与文本处理
+langchain>=0.3.0
+langchain-core>=0.3.0
+langgraph>=0.2.0
+
+# ---- gen/ 生成与校验 ------------------------------------------------------
+# qwen API 走 OpenAI 兼容接口，temperature=0
+openai>=1.50.0
+
+# ---- app/ 服务端（feat/app-skeleton 起）-----------------------------------
+fastapi>=0.115.0
+uvicorn>=0.30.0
+# TestClient 依赖 httpx（CI 跑 app 端到端测试必需）
+httpx>=0.27.0
+
+# ---- 本地模型（feat/rag-indexer、feat/rag-rerank 阶段再启用）---------------
+# embedding：Qwen3-Embedding-0.6B；reranker：bge-reranker-v2-m3
+# 两者合计约 3.5GB 权重，CPU 可跑但慢，建议有 GPU 再谈速度。
+# 说明：rag/indexer 的测试注入假编码器，CI 不需要这两个包；真正建索引/重排时再取消注释。
+# sentence-transformers>=3.0.0
+# FlagEmbedding>=1.3.0

@@ -18,9 +18,18 @@ raw/
 *.tif
 *.docx
 
+# 向量库与本地模型权重（feat/rag-indexer 产出，体积大且可重建）
+.chroma/
+models/
+*.jsonl
+
 # 前端
 node_modules/
 dist/
 
 # 系统
 .DS_Store
+
+# 评测跑批产物与本地消融配置（只提交 .example）
+runs/
+eval/ablation.json

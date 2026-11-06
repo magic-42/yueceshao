@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="粤策哨：粤东西北县域强村公司与合作社帮扶项目申报前自查辅助工具（静态演示版）。输入项目描述，查看四段式申报前自查报告。">
   <title>粤策哨 · 申报前自查辅助工具（静态演示版）</title>
-  <link rel="icon" href="data:,">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='3' y='3' width='58' height='58' rx='10' fill='%23a33327'/%3E%3Ctext x='32' y='45' font-family='Songti SC, SimSun, serif' font-size='38' font-weight='700' fill='%23fdfbf4' text-anchor='middle'%3E%E7%B2%A4%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -20,7 +20,7 @@
           <p class="brand-sub">县域强村公司与合作社 · 申报前自查辅助工具</p>
         </div>
       </div>
-      <span class="brand-tag">静态演示版 · 预置案例</span>
+      <span class="brand-tag">静态演示版 · 典型案例</span>
     </div>
   </header>
 
@@ -35,52 +35,72 @@
         <div class="field">
           <label for="project-input">项目描述</label>
           <textarea id="project-input" rows="7"
-            placeholder="例如：我是某县某镇某村人居环境整治项目的申报人。我村常住人口约1200人……（也可以点击下方预置案例，一键填入）"></textarea>
+            placeholder="例如：我是某县某镇某村人居环境整治项目的申报人。我村常住人口约1200人……（也可以点击下方典型案例，一键填入）"></textarea>
           <p class="char-count" id="char-count" aria-live="polite">0 字</p>
         </div>
         <div class="form-actions">
           <button type="submit" class="btn btn-primary" id="check-btn">开始体检</button>
+          <button type="button" class="btn btn-ghost" id="random-btn">随机生成项目描述</button>
           <button type="button" class="btn btn-ghost" id="clear-btn">清空</button>
         </div>
-        <p class="form-hint">本页面为纯前端静态演示：内容不出本机、不上传任何数据；体检结果来自下方预置案例的静态报告。</p>
+        <p class="form-hint">本页面为纯前端静态演示：内容不出本机、不上传任何数据；体检结果来自下方典型案例的静态报告。</p>
       </form>
     </section>
 
-    <!-- ② 预置案例 -->
-    <section class="presets" aria-labelledby="presets-title">
-      <h2 id="presets-title" class="section-title">预置案例（点击即可填入）</h2>
+    <!-- 模拟体检过程（演示动画，非真实推理） -->
+    <section class="analyze" id="analyze" hidden aria-label="体检进行中（演示动画）">
+      <div class="analyze-card">
+        <p class="analyze-title">体检进行中</p>
+        <ol class="analyze-steps" id="analyze-steps">
+          <li><span class="step-no">1</span>解析项目描述</li>
+          <li><span class="step-no">2</span>扫描政策语料库</li>
+          <li><span class="step-no">3</span>负面清单逐条比对</li>
+          <li><span class="step-no">4</span>汇总四段式报告</li>
+        </ol>
+        <div class="analyze-progress">
+          <div class="analyze-bar"><span class="analyze-fill" id="analyze-fill"></span></div>
+          <p class="analyze-status">
+            <span class="analyze-pct" id="analyze-pct">0%</span>
+            <span class="analyze-status-text" id="analyze-status-text">正在解析项目描述</span>
+          </p>
+        </div>
+        <p class="analyze-note">演示流程示意 · 本页为静态预置输出，非真实推理</p>
+      </div>
+    </section>
+
+    <!-- ② 典型案例 -->
+    <section class="presets" id="presets" aria-labelledby="presets-title">
+      <h2 id="presets-title" class="section-title">典型案例（点击即测）</h2>
       <p class="section-sub">三个案例均改编自审计公告真实条目（案例标注表），点击卡片会把完整项目描述填入上方输入框。</p>
       <ul class="case-list" id="case-list"><!-- 由 js/app.js 渲染 --></ul>
     </section>
-
-    <!-- 报告解读指引 -->
     <section class="howto" aria-labelledby="howto-title">
       <h2 id="howto-title" class="section-title">四段式报告 · 怎么看</h2>
       <p class="section-sub">报告由四段组成，越往下越接近「动手改」；颜色标签代表风险等级，不是结论。</p>
       <ul class="howto-grid">
         <li class="howto-item">
-          <span class="howto-no" aria-hidden="true">①</span>
+          <span class="howto-no" aria-hidden="true">1</span>
           <div class="howto-body">
             <p class="howto-name">适用政策清单</p>
             <p class="howto-desc">列出与你的项目主题可能相关的政策文件与条款。每个文件带时效标签：<b>现行有效</b>（还在执行）、<b>申报已截止</b>（受理窗口已过，仅作后续批次参考）、<b>已失效供参考</b>（历史口径）。</p>
           </div>
         </li>
         <li class="howto-item">
-          <span class="howto-no" aria-hidden="true">②</span>
+          <span class="howto-no" aria-hidden="true">2</span>
           <div class="howto-body">
             <p class="howto-name">负面清单命中提示</p>
             <p class="howto-desc">对照政策红线，标出可能踩到的地方，分两级：<b>规则命中</b>（明确落入现行规定）与 <b>疑似命中</b>（建议对照原文）。每条都附依据文号、条款号、日期与原文摘录。</p>
           </div>
         </li>
         <li class="howto-item">
-          <span class="howto-no" aria-hidden="true">③</span>
+          <span class="howto-no" aria-hidden="true">3</span>
           <div class="howto-body">
             <p class="howto-name">材料缺项清单</p>
             <p class="howto-desc">对照第①段命中的现行政策，提示你申报时建议核对、补齐的材料（提示性质，不替代正式申报清单）。</p>
           </div>
         </li>
         <li class="howto-item">
-          <span class="howto-no" aria-hidden="true">④</span>
+          <span class="howto-no" aria-hidden="true">4</span>
           <div class="howto-body">
             <p class="howto-name">修改建议</p>
             <p class="howto-desc">在表述层面给改进建议，口吻是「建议」而非「判定」。你不一定要照做，但能少走弯路。</p>
@@ -92,35 +112,41 @@
         <p><span class="badge badge-rule">规则命中</span> 明确踩到现行规定，附依据文号、条款号与原文摘录。</p>
         <p><span class="badge badge-suspect">疑似命中</span> 建议对照原文确认；知识库暂未收录对应文号时，不硬判、不编造。</p>
       </div>
-      <p class="howto-note">为什么只给提示、不给「合规 / 可以申报」结论？最终以政策法规原文及主管部门意见为准，本工具仅做申报前自查辅助。静态演示版仅内置 3 个预置案例的报告，真人系统为「输入即出」。</p>
+      <p class="howto-note">为什么只给提示、不给「合规 / 可以申报」结论？最终以政策法规原文及主管部门意见为准，本工具仅做申报前自查辅助。静态演示版仅内置 3 个典型案例的报告，真人系统为「输入即出」。</p>
     </section>
 
     <!-- 未命中提示 -->
     <section class="notice" id="notice" hidden>
       <div class="notice-card" role="status">
-        <p class="notice-title">演示版暂未内置这份项目描述对应的报告</p>
-        <p>本静态演示版仅内置 <strong>3 个预置案例</strong>的四段式体检报告。请点击上方任一预置案例卡片填入描述后再点「开始体检」，即可查看对应的静态报告。</p>
-        <button type="button" class="btn btn-ghost" id="notice-back">回到预置案例</button>
+        <p class="notice-title">未在演示语料库中识别到相关政策</p>
+        <p>演示版收录的政策语料范围有限，暂时无法为这份描述生成体检报告——这只说明该场景不在演示覆盖范围内，<strong>不代表项目本身有问题</strong>。想立刻查看报告效果？点击上方「随机生成项目描述」，或任选一条典型案例卡片。</p>
+        <button type="button" class="btn btn-ghost" id="notice-back">回到典型案例</button>
       </div>
     </section>
 
     <!-- ③ 四段式体检报告 -->
-    <section class="report-wrap" id="report-wrap" hidden aria-live="polite" aria-label="体检报告">
+    <section class="report-wrap" id="report-wrap" hidden aria-label="体检报告">
       <div id="report-body"><!-- 由 js/app.js 渲染 --></div>
     </section>
 
-    <!-- 数据来源说明 -->
+    <!-- 数据来源说明（默认收起，点击展开） -->
     <section class="data-notes" aria-labelledby="notes-title">
-      <h2 id="notes-title" class="section-title">演示数据来源说明</h2>
-      <div class="notes-card">
-        <p>本页引用的全部<strong>文号、条款号与日期</strong>，均来自团队知识库已核验条目，未作任何编造：</p>
-        <ul>
-          <li>文号、发布日期、效力状态：<code>04_政策语料/00_工作区/registry.json</code> 与 <code>04_政策语料/政策文件清单-初稿.csv</code>；</li>
-          <li>条款原文摘录：<code>04_政策语料/03_清洗文本/</code> 对应文件（逐字摘录）；</li>
-          <li>预置案例：<code>04_政策语料/审计公告/案例标注表.csv</code> 的「改编后申报场景描述」列（案例 C139、C83、C02）；</li>
-          <li>标注习惯：原文载明施行条款的，按原文标注施行日期；未载明施行条款的，按 registry「发布日期」标注印发日期，不作推断。</li>
-        </ul>
-      </div>
+      <details class="notes-details">
+        <summary class="notes-summary">
+          <h2 id="notes-title" class="section-title">演示数据来源说明</h2>
+          <span class="notes-hint">点击展开核验来源</span>
+          <span class="notes-chevron" aria-hidden="true">▸</span>
+        </summary>
+        <p class="section-sub">本页引用的全部<strong>文号、条款号与日期</strong>，均来自团队知识库已核验条目，未作任何编造：</p>
+        <div class="notes-card">
+          <ul>
+            <li>文号、发布日期、效力状态：<code>04_政策语料/00_工作区/registry.json</code> 与 <code>04_政策语料/政策文件清单-初稿.csv</code>；</li>
+            <li>条款原文摘录：<code>04_政策语料/03_清洗文本/</code> 对应文件（逐字摘录）；</li>
+            <li>典型案例来源：<code>04_政策语料/审计公告/案例标注表.csv</code> 的「改编后申报场景描述」列（案例 C139、C83、C02）；</li>
+            <li>标注习惯：原文载明施行条款的，按原文标注施行日期；未载明施行条款的，按 registry「发布日期」标注印发日期，不作推断。</li>
+          </ul>
+        </div>
+      </details>
     </section>
   </main>
 

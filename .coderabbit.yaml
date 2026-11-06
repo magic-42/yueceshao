@@ -1,0 +1,19 @@
+# CodeRabbit 配置——接入前预置，安装 GitHub App 后即生效
+# 原则：只读建议、永不阻塞（request_changes_workflow 关闭），中文意见
+language: zh-CN
+tone_instructions: >-
+  面向学生团队的中文审查意见：具体、给修法、不空泛；
+  尊重仓库既有约定（中文注释允许、标识符英文、ruff 行宽 100）。
+early_access: false
+reviews:
+  profile: chill
+  request_changes_workflow: false   # 关键：绝不以 request-changes 阻塞 PR，只发建议评论
+  high_level_summary: true
+  poem: false
+  sequence_diagrams: false
+  auto_review:
+    enabled: true
+    drafts: false                   # 草稿 PR 不打扰
+    base_branches: [main]
+chat:
+  auto_reply: false

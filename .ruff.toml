@@ -1,0 +1,17 @@
+# ruff 静态检查配置——把 README「编码规范」从自觉变成机器口径
+# CI 当前为建议模式（报告不阻塞）；存量清零后转强制门（见 ci.yml lint job 注释）
+target-version = "py310"
+line-length = 100          # 中文注释项目惯例；现有代码事实标准（超限处列入清理）
+src = ["rag", "rules", "gen", "eval", "scripts", "tests"]
+
+[lint]
+select = [
+    "E", "W",  # pycodestyle：风格与行长
+    "F",       # pyflakes：未用导入/未定义名
+    "I",       # isort：导入排序（四人四 agent 的统一性第一关）
+    "B",       # bugbear：常见逻辑坑
+    "UP",      # pyupgrade：现代写法
+]
+
+[lint.isort]
+known-first-party = ["rag", "rules", "gen", "eval"]

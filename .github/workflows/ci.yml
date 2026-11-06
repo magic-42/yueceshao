@@ -1,0 +1,43 @@
+name: CI
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: 安装依赖
+        run: |
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "尚无 requirements.txt，跳过项目依赖安装"
+          fi
+          pip install pytest
+      - name: 跑测试（如存在）
+        run: |
+          if find . -name "test_*.py" -not -path "./.git/*" | grep -q .; then
+            python -m pytest -q
+          else
+            echo "尚无测试文件，CI 通过（首个功能 PR 必须带入测试）"
+          fi
+
+  # 静态检查（强制门，2026-11-06 起）：存量已于 chore/ruff-zero 清零（105→0）。
+  # 新增代码须过 ruff；如遇确需豁免的行，用行级 `# noqa: E501` 并在注释里说明理由。
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install ruff
+      - name: ruff 检查（编码规范强制门）
+        run: ruff check .

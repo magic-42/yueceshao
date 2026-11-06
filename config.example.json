@@ -1,0 +1,59 @@
+{
+  "_说明": "本文件是配置样例，复制为 config.json 后按本机实际路径修改；config.json 已在 .gitignore 中，不会入库。",
+  "_数据仓说明": "数据仓 kohl7614/yueceshao-data 为只读：只能 clone/pull，严禁 push。两个仓库建议并排放置。",
+  "data_repo": "../yueceshao-data",
+  "registry_path": "00_工作区/registry.json",
+  "rules_terms_file": "00_工作区/负面清单_条款归并.json",
+  "audit_cases_file": "审计公告/案例标注表.csv",
+  "clean_text_dir": "03_清洗文本",
+  "snapshot_dir": "02_页面快照",
+  "index": {
+    "backend": "chroma",
+    "persist_dir": ".chroma",
+    "collection": "yueceshao_clauses"
+  },
+  "embedding": {
+    "model_name": "Qwen/Qwen3-Embedding-0.6B",
+    "model_dir": "models/Qwen3-Embedding-0.6B",
+    "device": "cpu",
+    "batch_size": 16
+  },
+  "_retrieval_说明": "检索段（rag/retriever.py 的 RetrievalConfig.from_config 读取，缺键回落代码默认值）：top_k 返回条数（给重排用可调大）；enable_temporal_filter 时效硬过滤开关（默认开，关掉仅用于消融对照）；exclude_categories 检索端排除的类别（红线④，默认排除审计公告）；exclude_preamble/exclude_appendix 是否排除前言块/附录块（默认保留）。",
+  "retrieval": {
+    "top_k": 10,
+    "enable_temporal_filter": true,
+    "exclude_categories": ["审计公告"],
+    "exclude_preamble": false,
+    "exclude_appendix": false
+  },
+  "hybrid": {
+    "_说明": "BM25＋稠密 RRF 融合（A5）。rrf_k 与两路权重属 T2 待评测定稿项，此处为手册起步值。",
+    "top_k": 10,
+    "dense_k": 40,
+    "bm25_k": 40,
+    "rrf_k": 60,
+    "dense_weight": 0.5,
+    "sparse_weight": 0.5,
+    "enable_temporal_filter": true
+  },
+  "reranker": {
+    "_说明": "Cross-Encoder 重排与质量门（A7/A11）。tau 由 40 条自建查询标定：域内查询最低 0.605、完全域外最高 0.507，取 0.55 落在零误拦平台区。改阈值前请先复跑标定脚本，过程见 docs/rag-rerank-标定.md。",
+    "model_name": "BAAI/bge-reranker-v2-m3",
+    "model_dir": "models/bge-reranker-v2-m3",
+    "device": "cpu",
+    "top_k_in": 40,
+    "top_k_out": 8,
+    "max_length": 512,
+    "tau": 0.55,
+    "enable_gate": true,
+    "retry_factor": 2,
+    "max_attempts": 2
+  },
+  "generation": {
+    "provider": "qwen",
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "model": "qwen-plus",
+    "temperature": 0,
+    "api_key_env": "DASHSCOPE_API_KEY"
+  }
+}

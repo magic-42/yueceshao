@@ -35,19 +35,21 @@
 
 技术栈：Python · LangChain · LangGraph · FastAPI · Chroma · SQLite（文号注册表）· 本地 embedding（Qwen3-Embedding-0.6B）与 reranker（bge-reranker-v2-m3）· 静态前端（GitHub Pages）。
 
-## 仓库结构（规划，随开发逐步落地）
+## 仓库结构（已落地，2026-11-06）
 
 ```
 yueceshao/
 ├── README.md            # 本文件
-├── docs/协作规范.md      # git 协作流程（fork→分支→PR→合并）
-├── rag/                 # 检索管线：结构感知分块、混合检索、重排、时效过滤
-├── rules/               # 负面清单结构化规则库与规则引擎
-├── gen/                 # 生成、标记式引用渲染、确定性校验器
-├── eval/                # 评测脚本；全部消融开关（配置布尔位）集中在此
-├── app/                 # FastAPI 服务（后置）
-├── docs/                # 静态 demo（预置案例，GitHub Pages 部署于本目录）
-├── tests/               # pytest
+├── docs/协作规范.md      # git 协作流程（协作者直推分支→PR→owner 合并）
+├── docs/AI协作开发规范.md # AI 写码·AI 预审·人终审的质量流程
+├── rag/                 # ✅ 检索管线：loader→chunker→indexer→retriever→hybrid→rerank
+├── rules/               # ✅ 负面清单规则库＋确定性匹配引擎（含 curation 出局）
+├── gen/                 # ✅ 三段提示词／四段式 schema／标记式引用渲染／确定性校验器
+├── eval/                # ✅ 消融开关＋评测跑批＋τ标定资产；--pipeline rules 已可跑真数据基线
+├── app/                 # ✅ FastAPI 骨架＋LangGraph 编排（真实适配器待接）
+├── docs/                # 静态 demo（GitHub Pages 部署于本目录）
+├── scripts/             # 评测辅助脚本
+├── tests/               # ✅ pytest 386 条
 ├── config.example.json  # 配置样例（真实配置不入库）
 └── .env.example         # 环境变量样例（API key 等永不入库）
 ```
@@ -68,17 +70,20 @@ yueceshao/
 - 日志用 `logging`，不用 `print`；
 - 关键路径（分块对齐、时效过滤、引用校验器、规则命中）必须有 pytest 用例；
 - 消融开关全部集中在 `eval/` 的配置布尔位，不得散落硬编码；
+- 静态检查用 `ruff`（配置见 `.ruff.toml`，本地跑 `ruff check .`）：CI 现为建议模式，存量清零后转强制；
 - 中文注释允许且鼓励（团队约定），但标识符用英文。
 
 ## 开发流程
 
-见 [docs/协作规范.md](docs/协作规范.md)：**fork → 分支 → PR → owner 审阅合并**。只有仓库所有者有合并权，任何人不得直接 push `main`。
+见 [docs/协作规范.md](docs/协作规范.md)：**分支 → PR → 预审 → 合并**。合并权归仓库所有者（owner）；owner 可按 [docs/AI协作开发规范.md](docs/AI协作开发规范.md) §8 把「审＋合」按通道 A 委托给独立会话的审核与合入代理，通道 B **仍须 owner 终审**（可逐次明示授权代审，须留痕）。任何人都不得直接 push `main`。合并留痕见 [docs/合并台账.md](docs/合并台账.md)。
+
+人与 AI 协作写码的质量流程（计划先行 / TDD 关键路径 / PR 模板 / AI 预审＋人终审 / CI）见 [docs/AI协作开发规范.md](docs/AI协作开发规范.md)。
 
 ## 给 AI 编程助手的话（agent 必读）
 
 如果你（AI 助手）被要求为本仓库写代码：
 
-1. 先读完本 README 与 `docs/协作规范.md` 再动手；
+1. 先读完本 README、`docs/协作规范.md` 与 `docs/AI协作开发规范.md` 再动手；
 2. 只改动与当前任务相关的文件，不顺手重构无关代码；
 3. 严格遵守上方"开发红线"与"编码规范"；
 4. 需要政策文本样例时，向人索取知识库条目，**不要凭训练记忆写任何文号**；
